@@ -15,13 +15,12 @@ window.addEventListener('DOMContentLoaded',async ()=>{
 
     
     try{
-        console.log("DOM loaded");
+        
        const prom = await axios.get(`${url}/expenses`);
-       console.log(prom);
-       //for(let i=0 ;i < prom.data.Expenses.length; i++){
+       for(let i=0 ;i < prom.data.Expenses.length; i++){
 
-            //displayData(prom.data.Expenses[i]);
-      // }
+            displayData(prom.data.Expenses[i]);
+       }
         
     }  
     catch(err){

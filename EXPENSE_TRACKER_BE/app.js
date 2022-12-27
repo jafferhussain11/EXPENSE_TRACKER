@@ -21,7 +21,9 @@ const signupRoute = require('./routes/signup');
 
 app.use(formRoute);
 app.use(signupRoute);
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ extended: false }));
+app.use(express.static(__dirname + '/views'));
+
 
 
 sequelize.sync().then(result => {//this will create the tables in the database from all the models defined in the sequelize object

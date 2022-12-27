@@ -1,0 +1,74 @@
+.wholeform{
+
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1500px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background: #f8f8f8;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+
+    
+
+}
+.button {
+
+    font: inherit;
+    border: 1px solid black;
+    color: purple;
+    background: rgb(132, 196, 175);
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 5px 10px;
+
+}
+
+.button:hover,
+.button:active {
+    background-color: purple;
+    color: white;
+}
+h1{
+
+    text-align: center;
+    color: black;
+    background-color: rgb(132, 196, 175);
+    margin : 0;
+    padding: 0;
+
+    
+}
+div{
+    margin: 0 auto;
+    width: 100%;
+    max-width: 900px;
+    padding: 10px;
+    
+}
+li{
+    
+        list-style-type: none;
+        display: inline-block;
+        text-align: center;
+        align-items: center;
+        width: 95%;
+        background-color: rgb(132, 196, 175);
+        color: black;
+        font-size: 20px;
+        font-weight: bold;
+        font-family: sans-serif;
+        padding: 10px 0;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        border-radius: 3px;
+        margin-bottom: 20px;
+        text-decoration: none;
+        outline-color: black;
+        outline-style: solid;
+        outline-width: 1px;
+}

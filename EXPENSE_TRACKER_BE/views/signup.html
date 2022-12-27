@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    
+    <link rel="stylesheet" href="stylesignup.css">
+    <script src="./signup.js" defer></script>
+
+
+</head>
+<body>
+    <h1>Sign Up To Track Your Expenses</h1>
+    <form>
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <button id = "submitbtn">Sign Up!</button>
+    </form>
+    <p class="signin-link">Already have an account? <a href="/login.html">Sign in here</a>.</p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+
+</body>
+</html>

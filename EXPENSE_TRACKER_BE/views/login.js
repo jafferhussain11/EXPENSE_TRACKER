@@ -15,13 +15,9 @@ loginbtn.addEventListener('click', (e) => {
     })
     .then(response => {
    
-        //alert(response.data.message);
-        //window.location.reload();
-        //display an alert and redirect to the index page
         alert(response.data.message);
+        //window.location.reload();
         window.location.href = "http://localhost:5000/";
-        
-
       
     })
     .catch(error => {
