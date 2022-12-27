@@ -2,6 +2,8 @@ const User = require('../models/users');
 
 const path = require('path');
 
+const bcrypt = require('bcrypt');
+
 
 
 
@@ -11,7 +13,7 @@ exports.signup = async (req, res, next) => {
     try{
         //console.log(req.body); //req body must be parsed by json body parser !
         const username = req.body.name;
-        const password = req.body.password;
+        let password = req.body.password;
         const email = req.body.email;
 
         if(!username || !password || !email){
@@ -29,20 +31,22 @@ exports.signup = async (req, res, next) => {
 
             throw new Error('email already exists');
         }
+        bcrypt.hash(password, 12).then(hashedPassword => {
 
-        User.create({
-            username: username,
-            password: password,
-            email: email
-        }).then(user => {
+            password = hashedPassword;
+            User.create({
+                username: username,
+                password: password,
+                email: email
+              }).then(user => {
                 
-                res.status(200).json({message: 'user created', value: user});
+                    res.status(200).json({message: 'user created', value: user});
+                });
         });
 
 
-    }catch(err){
+    } catch(err){
         
-        console.log(err.message);
         return res.status(400).json({message: err.message});
     }
 }
@@ -64,15 +68,23 @@ exports.login = async (req, res, next) => {
 
                 if(user){
 
-                    const checkpass = user.password;
-                    if(checkpass === password){
+                    const checkpass = user.password; // db hashed password
+                    
+                    bcrypt.compare(password, checkpass,(err, result)=>{
 
-                        res.status(200).json({message: 'user logged in', value: user});
-                    }else{
+                        if(err){
 
-                        res.status(401).json({message: 'User not Authorized'});
+                            throw new Error(err.message);
+                        }
+                        if(result){
 
-                    }
+                             res.status(200).json({message: 'login successful', value: user});
+                        }
+                        else{
+
+                             res.status(404).json({message: 'passwords do not match'});
+                        }
+                    })
                 }
                 else{
 
