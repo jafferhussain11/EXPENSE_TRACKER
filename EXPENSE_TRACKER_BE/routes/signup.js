@@ -9,6 +9,7 @@ const signupController = require('../controllers/signup');
 
 const router = express.Router();//this is a function that returns an object
 
+router.get('/',signupController.getSignup);
 router.post('/signup',jsonparser,signupController.signup);
 
 router.post('/login',jsonparser,signupController.login);

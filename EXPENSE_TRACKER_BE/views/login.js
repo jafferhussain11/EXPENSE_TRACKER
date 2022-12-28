@@ -15,9 +15,12 @@ loginbtn.addEventListener('click', (e) => {
     })
     .then(response => {
    
-        alert(response.data.message);
+        //alert(response.data.message);
+        //store token in local storage
+        console.log(response);
+        localStorage.setItem('token', response.data.token);
         //window.location.reload();
-        window.location.href = "http://localhost:5000/";
+        window.location.href = "http://localhost:5000/index.html";
       
     })
     .catch(error => {

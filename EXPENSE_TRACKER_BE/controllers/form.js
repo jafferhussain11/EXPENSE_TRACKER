@@ -1,12 +1,15 @@
+const { where } = require('sequelize');
 const Expense = require('../models/expense');
 
-
+let curuser;
 exports.getExpenses = async (req, res, next) => {
 
     //res.json({message: 'hello'});
     try{
 
-        await Expense.findAll().then(expenses => {
+        console.log(`req.userid : ${req.user.id}`);
+        curuser = req.user.id;
+        await Expense.findAll( { where :{UserId:req.user.id}}).then(expenses => {
 
             //console.log(expenses);
             res.status(200).json({Expenses: expenses});
@@ -21,7 +24,6 @@ exports.insertExpense = async (req, res, next) => {
     try{
         
         
-        console.log(req.body); //req body must be parsed by json body parser !
         const expenseval = req.body.expenseval;
         const description = req.body.desc;
         const category = req.body.cat;
@@ -32,12 +34,11 @@ exports.insertExpense = async (req, res, next) => {
         
         }else{
 
-            const data = await Expense.create({  
-                expenseval: expenseval,
-                description: description,
-                category: category
-            })
-            res.status(201).json({message: 'expense created', value: data});
+            console.log(curuser)
+            const data = await Expense.create({expenseval: expenseval, description: description, category: category, UserId : curuser}).then(expense => {
+
+                res.status(200).json({value: expense});
+            });
 
         }
     }catch(err){

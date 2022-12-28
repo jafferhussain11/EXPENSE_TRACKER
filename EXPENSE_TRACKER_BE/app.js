@@ -8,11 +8,14 @@ var cors = require('cors'); //
 app.use(cors());//cross origin resource sharing - allows us to make requests from one domain to another if we dont use this we will get an error
 
 
+
 const bodyParser = require('body-parser');
 
 
 
 const sequelize = require('./util/database');
+const User = require('./models/users');
+const Expenses = require('./models/expense');
 
 const formRoute = require('./routes/form');
 
@@ -24,7 +27,8 @@ app.use(signupRoute);
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(__dirname + '/views'));
 
-
+User.hasMany(Expenses);
+Expenses.belongsTo(User , {constraints: true, onDelete: 'CASCADE'});
 
 sequelize.sync().then(result => {//this will create the tables in the database from all the models defined in the sequelize object
 

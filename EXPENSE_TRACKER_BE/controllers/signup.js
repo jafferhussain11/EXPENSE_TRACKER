@@ -4,10 +4,15 @@ const path = require('path');
 
 const bcrypt = require('bcrypt');
 
+const jwt = require('jsonwebtoken');
 
 
 
+exports.getSignup = (req, res, next) => {
 
+    res.sendFile(path.join(__dirname, '../', 'views', 'signup.html'));
+
+}
 exports.signup = async (req, res, next) => {
 
     try{
@@ -78,7 +83,9 @@ exports.login = async (req, res, next) => {
                         }
                         if(result){
 
-                                res.status(200).json({message: 'login successful', value: user});
+                                const token = jwt.sign({email: user.email, userId : user.id}, 'secret', {expiresIn: '1h'});
+                                res.status(200).json({message: 'login successful', value: user, token: token});
+
                         }
                         else{
 

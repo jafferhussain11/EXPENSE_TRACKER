@@ -16,7 +16,8 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     
     try{
         
-       const prom = await axios.get(`${url}/expenses`);
+       const token = localStorage.getItem('token');
+       const prom = await axios.get(`${url}/expenses`, {headers: {Authorization: token} })
        for(let i=0 ;i < prom.data.Expenses.length; i++){
 
             displayData(prom.data.Expenses[i]);
