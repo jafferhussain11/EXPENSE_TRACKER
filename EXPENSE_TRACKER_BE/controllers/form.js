@@ -34,10 +34,9 @@ exports.insertExpense = async (req, res, next) => {
         
         }else{
 
-            console.log(curuser)
             const data = await Expense.create({expenseval: expenseval, description: description, category: category, UserId : curuser}).then(expense => {
 
-                res.status(200).json({value: expense});
+                res.status(200).json({success : true, message: 'expense added', value: expense});
             });
 
         }

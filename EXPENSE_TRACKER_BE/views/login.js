@@ -20,7 +20,7 @@ loginbtn.addEventListener('click', (e) => {
         console.log(response);
         localStorage.setItem('token', response.data.token);
         //window.location.reload();
-        window.location.href = "http://localhost:5000/index.html";
+        window.location.href = "http://localhost:5000/expenses.html";
       
     })
     .catch(error => {

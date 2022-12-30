@@ -1,9 +1,12 @@
 
 const form = document.getElementById('myform');
 
+//const Razorpay = require('razorpay');
+
 //userlist
 const userList = document.getElementById('userlist');
 
+const addExpButton = document.getElementById('addExpButton');
 
 var url = "http://localhost:5000";
 
@@ -42,18 +45,18 @@ function addExpense(event){
         desc: event.target.desc.value,
         cat: event.target.cat.value
     }
-    
+
     async function postData(data){
 
         try{
 
             const prom = await axios.post(`${url}/addexpense`,data);
-            //console.log(prom.data);
+            console.log(prom.data);
             displayData(prom.data.value); //prom.data.value recieves the data from the server including the id and passed to displayData function !
         }
         catch(err){
 
-            alert(err.response.data.message);
+            alert(err.response.message);
 
         }
     }
@@ -96,3 +99,43 @@ async function deleteExpense(id){
         console.log(err);
     }
 }
+
+document.getElementById('rzp-button').onclick = async function(e){
+
+    const token = localStorage.getItem('token');
+    const prom = await axios.get(`${url}/premium`, {headers: {Authorization: token} })
+   
+    var options = {
+       
+        "key" : prom.data.key_id, // Enter the Key ID generated from the Dashboard
+        "order_id" : prom.data.order.id,
+        "handler" :  async function (response){
+
+            await axios.post(`${url}/premium`,
+            {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,}
+                ,{headers: {Authorization: token} })
+
+            alert("You are Now A premium Member !");
+        },
+    };
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
+    e.preventDefault();
+    
+    rzp1.on('payment.failed', async function (response){
+
+        console.log(response);
+        await axios.post(`${url}/premium`,
+        {
+            razorpay_order_id: response.error.metadata.order_id},
+            {headers: {Authorization: token}
+        })
+        alert("Payment Failed !");
+    });
+}
+
+    
+
+
