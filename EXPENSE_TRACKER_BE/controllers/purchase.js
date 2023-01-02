@@ -1,6 +1,9 @@
 const rzp = require('razorpay');
+const Expense = require('../models/expense');
 const Order = require('../models/orders');
+const User = require('../models/users');
 
+const Sequelize = require('sequelize');
 
 
 exports.purchasePremium = (req,res,next) => {
@@ -77,4 +80,86 @@ exports.verifyPayment = async (req,res,next) => {
     }
 }
 
+exports.checkIfPremium = (req,res,next) => {
 
+    try{
+
+        if(req.user.isPremium){
+
+            return res.status(200).json({isPremium : true});
+        }
+        else{
+
+            return res.status(200).json({isPremium : false});
+        }
+
+    }catch(err){
+
+        res.status(403).json({message: err.message});
+    }
+}
+
+exports.getLeaderboard = (req,res,next) => {
+    
+    try{
+
+        let leaderboard = [];
+        Expense.findAll({
+            attributes : ['User.id','User.username', [Sequelize.fn('SUM', Sequelize.col('expenseval')), 'totalAmount']],
+            include: [{model: User}],
+            group: ['User.id'],
+            order: [[Sequelize.literal('totalAmount'), 'DESC']]
+        }).then(expenseTotalRows => {
+                
+            expenseTotalRows.forEach(row => { 
+                    
+                    leaderboard.push({name: row.User.username
+                        , amount: row.dataValues['totalAmount']});
+                })
+                return res.status(200).json({leaderboard});
+            }).catch(err => {
+
+                throw new Error(err.message);
+            })
+       
+
+    }catch(err){
+
+        res.status(403).json({message: err.message});
+    }
+}
+
+
+
+
+
+
+
+
+
+ // Expense.findAll({
+        //     group: ['UserId'],
+        //     attributes: ['UserId', [Sequelize.fn('SUM', Sequelize.col('expenseval')), 'totalAmount']],
+        //     order: [[Sequelize.literal('totalAmount'), 'DESC']]
+
+        //   }).then(expenseTotalRows => {
+
+        //     expenseTotalRows.forEach(row => { 
+
+        //         //console.log(row.dataValues['UserId']);
+        //         User.findOne({where: {id: row.dataValues['UserId']}}).then(user => {
+
+        //             leaderboard.push({name: user.dataValues.username, amount: row.dataValues['totalAmount']});
+        //             if(leaderboard.length === expenseTotalRows.length){
+
+        //                 return res.status(200).json({leaderboard});
+        //             }
+        //         }).catch(err => {
+
+        //             throw new Error(err.message);
+        //         })
+        //     })
+        // }).catch(err => {
+                
+        //         throw new Error(err.message);
+        //     })

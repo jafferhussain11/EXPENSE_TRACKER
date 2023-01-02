@@ -5,7 +5,7 @@ const form = document.getElementById('myform');
 const userList = document.getElementById('userlist');
 
 //crudURDL
-var url = "https://crudcrud.com/api/f312afa3fd2848d1ba04fcd9463de4cd/expense_tracker";
+var url = "https://crudcrud.com/api/4f675f70dbd9486e80c2db71d1c53ebf/expense_tracker";
 
 //event listner1
 form.addEventListener('submit',addUser);

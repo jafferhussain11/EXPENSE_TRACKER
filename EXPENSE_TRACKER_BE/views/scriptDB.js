@@ -8,6 +8,10 @@ const userList = document.getElementById('userlist');
 
 const addExpButton = document.getElementById('addExpButton');
 
+const premiumButton = document.getElementById('rzp-button');
+
+const messageDiv = document.getElementById('messageDiv');
+
 var url = "http://localhost:5000";
 
 //event listner1
@@ -20,12 +24,27 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     try{
         
        const token = localStorage.getItem('token');
-       const prom = await axios.get(`${url}/expenses`, {headers: {Authorization: token} })
-       for(let i=0 ;i < prom.data.Expenses.length; i++){
+       const prom1 = await axios.get(`${url}/expenses`, {headers: {Authorization: token} })
+       const prom2 = await axios.get(`${url}/premium/check`, {headers: {Authorization: token} })
+       Promise.all([prom1,prom2]).then((values) => {
 
-            displayData(prom.data.Expenses[i]);
-       }
-        
+            console.log(values[0].data);
+            console.log(values[1].data);
+            if(values[1].data.isPremium){
+
+                premiumButton.style.display = 'none';
+                messageDiv.innerHTML = `You are a premium user ! <br><br>`;
+                leaderboard();
+
+            }else{
+
+                premiumButton.style.display = 'block';
+            }
+            for(let i=0;i<values[0].data.Expenses.length;i++){
+
+                displayData(values[0].data.Expenses[i]);
+            }
+        })
     }  
     catch(err){
         console.log(err);
@@ -118,6 +137,9 @@ document.getElementById('rzp-button').onclick = async function(e){
                 ,{headers: {Authorization: token} })
 
             alert("You are Now A premium Member !");
+            premiumButton.style.display = 'none';
+            messageDiv.innerHTML = `You are a premium user ! <br><br>`;
+            //leaderboard();
         },
     };
     const rzp1 = new Razorpay(options);
@@ -136,6 +158,30 @@ document.getElementById('rzp-button').onclick = async function(e){
     });
 }
 
+function leaderboard(){
     
+    const leaderboardButton = document.createElement('button');
+    leaderboardButton.id = 'leaderboardButton';
+    leaderboardButton.innerText = 'Show Leaderboard';
+    messageDiv.appendChild(leaderboardButton);
+    leaderboardButton.addEventListener('click',()=>{
+        
+        axios.get(`${url}/premium/leaderboard`)
+        .then((res) => {
+          console.log(res.data);
+          res.data.leaderboard.forEach(item => {
+            let li = document.createElement('li');
+            li.innerHTML = `User: ${item.name} - Total Expenses: ${item.amount}`;
+            messageDiv.appendChild(li);
+          });
+        leaderboardButton.style.display = 'none';
+        }).catch((err) => {
+          console.log(err);
+        });
+       
+    })
+
+}
+   
 
 

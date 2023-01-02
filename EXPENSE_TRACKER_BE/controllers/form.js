@@ -27,6 +27,9 @@ exports.insertExpense = async (req, res, next) => {
         const expenseval = req.body.expenseval;
         const description = req.body.desc;
         const category = req.body.cat;
+        var totalExpense = req.body.totalExpense;
+        totalExpense = totalExpense + expenseval;
+
 
         if(!expenseval || !description || !category){
             

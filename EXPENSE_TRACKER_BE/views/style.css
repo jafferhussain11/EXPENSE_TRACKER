@@ -84,3 +84,19 @@ li{
     font-size: 1em;
     cursor: pointer;
   }
+  #messageDiv {
+
+    margin: 0 auto;
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: black;
+    background-color: #FFBB00;
+    border: 1px solid #FFBB00;
+    border-radius: 0.25em;
+    margin-bottom: 20px;
+
+  }
