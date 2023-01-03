@@ -12,7 +12,7 @@ exports.purchasePremium = (req,res,next) => {
         
         var instance = new rzp({
         key_id: 'rzp_test_ymshxTVZbrKr6k',
-        key_secret : 'LnUsgIaS6LReW9gap0K4yG5n'
+        key_secret : ''
 
         })
 

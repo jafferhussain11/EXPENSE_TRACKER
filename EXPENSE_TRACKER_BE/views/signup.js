@@ -18,8 +18,8 @@ submitbtn.addEventListener('click', (e) => {
       // Check the status of the response
    
         alert(response.data.message);
-        //refresh the page
-        window.location.reload();
+       // send to login page
+       window.location.href='http://localhost:5000/login.html';
       
     })
     .catch(error => {

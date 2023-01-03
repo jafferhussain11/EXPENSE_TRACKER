@@ -17,6 +17,7 @@ const sequelize = require('./util/database');
 const User = require('./models/users');
 const Expenses = require('./models/expense');
 const Order = require('./models/orders');
+const ResetToken = require('./models/forgotpasstokens');
 
 const formRoute = require('./routes/form');
 
@@ -24,10 +25,13 @@ const signupRoute = require('./routes/signup');
 
 const purchaseRoute = require('./routes/purchase');
 
+const forgotpassRoute = require('./routes/forgotpassword');
+
 
 app.use(formRoute);
 app.use(signupRoute);
 app.use(purchaseRoute);
+app.use(forgotpassRoute);
 
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(__dirname + '/views'));

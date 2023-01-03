@@ -1,16 +1,19 @@
 
 const form = document.getElementById('myform');
 
-//const Razorpay = require('razorpay');
-
 //userlist
-const userList = document.getElementById('userlist');
+const expenselist = document.getElementById('expenselist');
 
 const addExpButton = document.getElementById('addExpButton');
 
 const premiumButton = document.getElementById('rzp-button');
 
 const messageDiv = document.getElementById('messageDiv');
+
+const leaderboardcontent = document.getElementById('leaderboardcontent');
+
+const userlist = document.getElementById('userlist');
+
 
 var url = "http://localhost:5000";
 
@@ -33,7 +36,7 @@ window.addEventListener('DOMContentLoaded',async ()=>{
             if(values[1].data.isPremium){
 
                 premiumButton.style.display = 'none';
-                messageDiv.innerHTML = `You are a premium user ! <br><br>`;
+                messageDiv.innerHTML = `You are a premium user !`;
                 leaderboard();
 
             }else{
@@ -90,7 +93,7 @@ function displayData(data){
     li.innerHTML =`${data.expenseval}   ${data.description}  ${data.category}
      <button id="edit" onClick=editExpense('${data.expenseval}','${data.description}','${data.category}','${data.id}')>edit</button> 
      <button id="delete" onClick=deleteExpense('${data.id}')>delete</button>`;
-    userList.appendChild(li);
+    expenselist.appendChild(li);
     console.log(data);
 
 }
@@ -106,7 +109,7 @@ function editExpense(expenseval,desc,cat,id){
 }
 async function deleteExpense(id){
 
-    const liToDelete = userList.querySelector('[id="'+id+'"]');//grabbing the li element
+    const liToDelete = expenselist.querySelector('[id="'+id+'"]');//grabbing the li element
 
     try{
 
@@ -163,7 +166,7 @@ function leaderboard(){
     const leaderboardButton = document.createElement('button');
     leaderboardButton.id = 'leaderboardButton';
     leaderboardButton.innerText = 'Show Leaderboard';
-    messageDiv.appendChild(leaderboardButton);
+    leaderboardcontent.prepend(leaderboardButton);
     leaderboardButton.addEventListener('click',()=>{
         
         axios.get(`${url}/premium/leaderboard`)
@@ -172,7 +175,7 @@ function leaderboard(){
           res.data.leaderboard.forEach(item => {
             let li = document.createElement('li');
             li.innerHTML = `User: ${item.name} - Total Expenses: ${item.amount}`;
-            messageDiv.appendChild(li);
+            userlist.appendChild(li);
           });
         leaderboardButton.style.display = 'none';
         }).catch((err) => {

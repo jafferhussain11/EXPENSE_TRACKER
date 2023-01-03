@@ -13,6 +13,7 @@ exports.getSignup = (req, res, next) => {
     res.sendFile(path.join(__dirname, '../', 'views', 'signup.html'));
 
 }
+
 exports.signup = async (req, res, next) => {
 
     try{
@@ -54,6 +55,12 @@ exports.signup = async (req, res, next) => {
         
         return res.status(400).json({message: err.message});
     }
+}
+
+exports.getLogin = (req, res, next) => {
+
+    res.sendFile(path.join(__dirname, '../', 'views', 'login.html'));
+
 }
 
 exports.login = async (req, res, next) => {
@@ -110,3 +117,4 @@ exports.login = async (req, res, next) => {
         return res.status(500).json({message: err.message});
     }
 }
+
