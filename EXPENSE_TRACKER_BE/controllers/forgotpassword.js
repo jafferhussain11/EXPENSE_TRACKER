@@ -19,22 +19,29 @@ apiKey.apiKey = '';
 
 exports.getResetPassword = (req, res, next) => {
 
-    const email = decodeURIComponent(req.params.email);
-    const token = decodeURIComponent(req.params.token);
+    const token = req.query.token;
+    const email = req.query.email;
+
+    console.log(token);
+
     reset_token.findOne({where: {token: token, usermail: email}}).then(token => {
 
-        //check validity of token
         if(!token){
-             
+
             return res.status(200).json({message: 'Invalid token'});
         }
         if(token.expirationDate < Date.now()){
-
             return res.status(200).json({message: 'Token expired'});
         }
-        res.sendFile(path.join(__dirname, '..', 'views', 'reset-password.html'));
-    });
+
+        res.sendFile(path.join(__dirname, '../', 'views', 'reset-password.html'));
+    
+    }).catch(err => {
+            
+        return res.status(400).json({message: err.message});
+        });
 }
+
 exports.postForgotPasswordLink = (req, res, next) => {
 
     
@@ -48,7 +55,7 @@ exports.postForgotPasswordLink = (req, res, next) => {
                     return res.status(200).json({message: 'No user found with this email'});
                 }
                 const token = Math.floor(Math.random() * 1000000);
-                const resetPasswordLink = `http://localhost:5000/forgotpassword/reset-password/${encodeURIComponent(user.email)}/${encodeURIComponent(token)}`;
+                const resetPasswordLink = `http://localhost:5000/forgotpassword/reset-password?token=${token}&email=${email}`;
                 reset_token.create( {token: token, usermail: user.email, expirationDate : Date.now() + 3600000 }).then(() => {
 
                     const apiInstance = new sib.TransactionalEmailsApi();
@@ -100,13 +107,19 @@ exports.postForgotPasswordLink = (req, res, next) => {
 exports.postResetPassword = (req, res, next) => {
 
      try {
-
+        
+    
         const email = req.body.email;
         const newPassword = req.body.password;
         const token = req.body.token;
+        console.log(req.body)   
         reset_token.findOne({where: {token: token, usermail: email}}).then(token => {
 
-            console.log(token.expirationDate);
+            console.log(token);
+            if(!token){
+                
+                return res.status(200).json({message: 'Invalid token'});
+            }
             if(token.expirationDate < Date.now()){
 
                 return res.status(200).json({message: 'Token expired'});
@@ -116,6 +129,7 @@ exports.postResetPassword = (req, res, next) => {
                 bcrypt.hash(newPassword, 12).then(hashedPassword => {
 
                     user.password = hashedPassword;
+                    console.log(user.password)
                     user.save().then(() => {
                             
                             res.status(200).json({message: 'Password updated successfully'});

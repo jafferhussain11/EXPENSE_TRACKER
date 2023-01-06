@@ -23,9 +23,10 @@ exports.isAuth = (req,res,next) => {
         })
     }
     catch(err){
-        const error = new Error('Notticated');
-        error.statusCode = 401;
-        throw error;
+
+        res.status(401).json({ message: 'Not authorized !' });
+
+        
     }
 
 }

@@ -10,7 +10,7 @@ const forgotpassController = require('../controllers/forgotpassword');
 
 const router = express.Router();//this is a function that returns an object
 
-router.get('/forgotpassword/reset-password/:email/:token',forgotpassController.getResetPassword);
+router.get('/forgotpassword/reset-password',forgotpassController.getResetPassword);
 
 router.post('/forgotpassword/reset-password',jsonparser,forgotpassController.postResetPassword);
 
