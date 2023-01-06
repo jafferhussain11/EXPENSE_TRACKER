@@ -10,10 +10,11 @@ const premiumButton = document.getElementById('rzp-button');
 
 const messageDiv = document.getElementById('messageDiv');
 
-const leaderboardcontent = document.getElementById('leaderboardcontent');
+const premiumFeaturesDiv = document.getElementById('premiumFeaturesDiv');
 
 const userlist = document.getElementById('userlist');
 
+let expenses = [];
 
 var url = "http://localhost:5000";
 
@@ -29,6 +30,7 @@ window.addEventListener('DOMContentLoaded',async ()=>{
        const token = localStorage.getItem('token');
        const prom1 = await axios.get(`${url}/expenses`, {headers: {Authorization: token} })
        const prom2 = await axios.get(`${url}/premium/check`, {headers: {Authorization: token} })
+       expenses = prom1.data.Expenses;
        Promise.all([prom1,prom2]).then((values) => {
 
             console.log(values[0].data);
@@ -37,7 +39,8 @@ window.addEventListener('DOMContentLoaded',async ()=>{
 
                 premiumButton.style.display = 'none';
                 messageDiv.innerHTML = `You are a premium user !`;
-                leaderboard();
+                premiumFeatures();
+                //
 
             }else{
 
@@ -142,7 +145,7 @@ document.getElementById('rzp-button').onclick = async function(e){
             alert("You are Now A premium Member !");
             premiumButton.style.display = 'none';
             messageDiv.innerHTML = `You are a premium user ! <br><br>`;
-            //leaderboard();
+            
         },
     };
     const rzp1 = new Razorpay(options);
@@ -161,12 +164,28 @@ document.getElementById('rzp-button').onclick = async function(e){
     });
 }
 
-function leaderboard(){
+function premiumFeatures(){
     
     const leaderboardButton = document.createElement('button');
     leaderboardButton.id = 'leaderboardButton';
     leaderboardButton.innerText = 'Show Leaderboard';
-    leaderboardcontent.prepend(leaderboardButton);
+
+    const monthlyButton = document.createElement('button');
+    monthlyButton.id = 'monthlyButton';
+    monthlyButton.innerText = 'Monthly Expenses';
+    
+
+    const yearlyButton = document.createElement('button');
+    yearlyButton.id = 'yearlyButton';
+    yearlyButton.innerText = 'Yearly Expenses';
+
+    const downloadexp = document.createElement('button');
+    downloadexp.id = 'downloadexp';
+    downloadexp.innerText = 'Download Expenses';
+
+    premiumFeaturesDiv.prepend(leaderboardButton,monthlyButton,yearlyButton,downloadexp);
+
+
     leaderboardButton.addEventListener('click',()=>{
         
         axios.get(`${url}/premium/leaderboard`)
@@ -184,6 +203,162 @@ function leaderboard(){
        
     })
 
+    monthlyButton.addEventListener('click',()=>{
+
+        //convert expenses array to monthly expenses array and display as html table
+        let monthlyExpenses = [];
+        let curdate = new Date();
+        let month = curdate.getMonth();
+
+        for(let i=0;i<expenses.length;i++){
+
+            let postdate = new Date(expenses[i].createdAt);
+            let postmonth = postdate.getMonth();
+            if(postmonth == month){
+
+                monthlyExpenses.push(expenses[i]);
+            }
+
+        }
+        if (document.getElementsByTagName("table").length === 0) {
+                
+                let table = document.createElement("table");
+                // create table head with column names
+                let headRow = document.createElement("tr");
+                let dateHeading = document.createElement("th");
+                let descriptionHeading = document.createElement("th");
+                let categoryHeading = document.createElement("th");
+                let expenseHeading = document.createElement("th");
+                
+                dateHeading.innerHTML = "Date";
+                descriptionHeading.innerHTML = "Description";
+                categoryHeading.innerHTML = "Category";
+                expenseHeading.innerHTML = "Expense";
+                
+                headRow.appendChild(dateHeading);
+                headRow.appendChild(descriptionHeading);
+                headRow.appendChild(categoryHeading);
+                headRow.appendChild(expenseHeading);
+                table.appendChild(headRow);
+                let totalExpense = 0;
+                
+                for (let i = 0; i < monthlyExpenses.length; i++) {
+                  let row = document.createElement("tr");
+                  let dateCell = document.createElement("td");
+                  let descriptionCell = document.createElement("td");
+                  let categoryCell = document.createElement("td");
+                  let expenseCell = document.createElement("td");
+                
+                  let date = new Date(monthlyExpenses[i].createdAt);
+                  let dateString = date.toDateString();
+                  dateCell.innerHTML = dateString;
+                  descriptionCell.innerHTML = monthlyExpenses[i].description;
+                  categoryCell.innerHTML = monthlyExpenses[i].category;
+                  expenseCell.innerHTML = monthlyExpenses[i].expenseval;
+                
+                  row.appendChild(dateCell);
+                  row.appendChild(descriptionCell);
+                  row.appendChild(categoryCell);
+                  row.appendChild(expenseCell);
+                  table.appendChild(row);
+                  totalExpense += monthlyExpenses[i].expenseval;
+                
+                }
+                // create total row
+                let totalRow = document.createElement("tr");
+                let totalCell = document.createElement("td");
+                totalCell.innerHTML = "Total:";
+                totalCell.colSpan = 3; // merge cells in the first column
+                totalRow.appendChild(totalCell);
+            
+                let totalAmountCell = document.createElement("td");
+                totalAmountCell.innerHTML = totalExpense;
+                totalRow.appendChild(totalAmountCell);
+            
+                table.appendChild(totalRow);
+            
+                premiumFeaturesDiv.appendChild(table);
+
+        }
+
+        
+
+    })
+
+    yearlyButton.addEventListener('click',()=>{
+
+        let yearlyExpenses = [];
+        let monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+        ];
+
+        for (let i = 0; i < expenses.length; i++) {
+          let date = new Date(expenses[i].createdAt);
+          let month = date.getMonth() + 1; // months are zero-indexed
+          let year = date.getFullYear();
+          let monthString = month.toString().padStart(2, "0"); // pad month with leading zero
+          let key = `${year}-${monthString}`;
+        
+          if (!yearlyExpenses[key]) {
+            // create new month if it does not exist
+              yearlyExpenses[key] = {
+              month: month,
+              expenses: expenses[i].expenseval
+            };
+          } else {
+            // add expenses for existing month
+            yearlyExpenses[key].expenses += expenses[i].expenseval;
+          }
+        }
+
+        // convert object to array
+        yearlyExpenses = Object.values(yearlyExpenses);
+
+        // sort array by year and month
+        yearlyExpenses.sort((a, b) => {
+          if (a.year !== b.year) {
+            return a.year - b.year;
+          } else {
+            return a.month - b.month;
+          }
+        });
+
+        console.log(yearlyExpenses);
+        let div = document.getElementById("premiumFeaturesDiv");
+
+        let table = document.createElement("table");
+
+        // create table head with column names
+        let headRow = document.createElement("tr");
+        let monthHeading = document.createElement("th");
+        let expensesHeading = document.createElement("th");
+
+        monthHeading.innerHTML = "Month";
+        expensesHeading.innerHTML = "Expenses";
+
+        headRow.appendChild(monthHeading);
+        headRow.appendChild(expensesHeading);
+        table.appendChild(headRow);
+
+        // create table rows with cells for each month
+        for (let i = 0; i < yearlyExpenses.length; i++) {
+          
+          let row = document.createElement("tr");
+          let monthCell = document.createElement("td");
+          let expensesCell = document.createElement("td");
+        
+          monthCell.innerHTML = monthNames[yearlyExpenses[i].month - 1]; // get month name from array
+          expensesCell.innerHTML = yearlyExpenses[i].expenses;
+          row.appendChild(monthCell);
+          row.appendChild(expensesCell);
+          table.appendChild(row);
+        }
+        div.appendChild(table);
+
+
+
+    
+    })
 }
    
 
