@@ -113,7 +113,6 @@ exports.login = async (req, res, next) => {
     
     } catch (err) {
         
-        console.log(err.message);
         return res.status(500).json({message: err.message});
     }
 }

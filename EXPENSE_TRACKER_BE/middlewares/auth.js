@@ -5,12 +5,10 @@ const User = require('../models/users');
 exports.isAuth = (req,res,next) => {
     
     const token = req.get('Authorization');
-    console.log(token);
     let decodedToken;
     try{
         
         decodedToken = jwt.verify(token,'secret');
-        console.log(decodedToken);
         if(!decodedToken){
             const error = new Error('Not authenticated');
             error.statusCode = 401;

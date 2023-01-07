@@ -14,15 +14,13 @@ const { TransactionalEmailsApi } = require('sib-api-v3-sdk');
 const defaultClient = sib.ApiClient.instance;
 
 const apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = '';
+apiKey.apiKey = process.env.SIB_KEY;
 
 
 exports.getResetPassword = (req, res, next) => {
 
     const token = req.query.token;
     const email = req.query.email;
-
-    console.log(token);
 
     reset_token.findOne({where: {token: token, usermail: email}}).then(token => {
 
@@ -83,7 +81,6 @@ exports.postForgotPasswordLink = (req, res, next) => {
                         res.status(200).json({message: 'Please check your email to reset your password'});
                     }, function(error) {
 
-                        console.error(error);
                         res.status(403).json({message: error.message});
                     });
                 }).catch(err => {
@@ -111,11 +108,9 @@ exports.postResetPassword = (req, res, next) => {
     
         const email = req.body.email;
         const newPassword = req.body.password;
-        const token = req.body.token;
-        console.log(req.body)   
+        const token = req.body.token; 
         reset_token.findOne({where: {token: token, usermail: email}}).then(token => {
 
-            console.log(token);
             if(!token){
                 
                 return res.status(200).json({message: 'Invalid token'});
@@ -129,7 +124,6 @@ exports.postResetPassword = (req, res, next) => {
                 bcrypt.hash(newPassword, 12).then(hashedPassword => {
 
                     user.password = hashedPassword;
-                    console.log(user.password)
                     user.save().then(() => {
                             
                             res.status(200).json({message: 'Password updated successfully'});

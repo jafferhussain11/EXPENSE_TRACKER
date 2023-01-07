@@ -12,8 +12,8 @@ exports.purchasePremium = (req,res,next) => {
     try{
         
         var instance = new rzp({
-        key_id: 'rzp_test_ymshxTVZbrKr6k',
-        key_secret : ''
+        key_id: process.env.RAZORPAY_KEY,
+        key_secret : process.env.RAZORPAY_SECRET
 
         })
 
@@ -26,7 +26,6 @@ exports.purchasePremium = (req,res,next) => {
 
                 throw new Error(JSON.stringify(err));
             }
-            console.log(order);
             req.user.createOrder({orderid: order.id, status : 'PENDING '}).then(()=>
             {
                 return res.status(201).json({order, key_id : instance.key_id});
@@ -37,7 +36,6 @@ exports.purchasePremium = (req,res,next) => {
         })
     }catch(err){
 
-        console.log(err.message);
         res.status(403).json({message: err.message});
     }
 }
@@ -47,10 +45,8 @@ exports.verifyPayment = async (req,res,next) => {
 
     try{
         
-        console.log('verify payment')
         const paymentId = req.body.razorpay_payment_id;
         const orderId = req.body.razorpay_order_id;
-        console.log(paymentId);
         if(!paymentId){
 
            const order =  await Order.findOne({where: {orderId: orderId}});
@@ -132,8 +128,8 @@ exports.getLeaderboard = (req,res,next) => {
 async function uploadToS3(expensesJson,fileName){
 
     const BUCKET_NAME = 'expensetrackerlulu';
-    const IAM_USER_KEY = '';
-    const IAM_USER_SECRET = '';
+    const IAM_USER_KEY = process.env.AWS_ACCESS_KEY_ID;
+    const IAM_USER_SECRET = process.env.AWS_SECRET_ACCESS_KEY;
 
     const s3 = new AWS.S3({
 

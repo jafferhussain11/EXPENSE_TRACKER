@@ -1,12 +1,17 @@
 const path = require('path');
+const fs = require('fs');
 
 const express = require('express');
 const app = express(); //this is a function that returns an object
+const helmet = require('helmet');
+const morgan = require('morgan');
 
+const dotenv = require('dotenv');
+dotenv.config();
 
 var cors = require('cors'); //
 app.use(cors());//cross origin resource sharing - allows us to make requests from one domain to another if we dont use this we will get an error
-
+//app.use(helmet());
 
 
 const bodyParser = require('body-parser');
@@ -27,7 +32,10 @@ const purchaseRoute = require('./routes/purchase');
 
 const forgotpassRoute = require('./routes/forgotpassword');
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
+
+app.use(morgan('combined', { stream: accessLogStream }));
 app.use(formRoute);
 app.use(signupRoute);
 app.use(purchaseRoute);
@@ -52,7 +60,6 @@ Order.belongsTo(User , {constraints: true, onDelete: 'CASCADE'});
 sequelize.sync().then(result => {//this will create the tables in the database from all the models defined in the sequelize object
 
     //console.log(result);
-    app.listen(5000, () => {
-        console.log('server is running');
-    });
+    app.listen(process.env.PORT || 5000);
+
 }).catch(err=>console.log(err));
