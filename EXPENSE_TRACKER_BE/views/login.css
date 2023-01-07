@@ -52,6 +52,7 @@ a {
     color: #337ab7;
     text-decoration: none;
 }
+
 a:hover {
     color: #23527c;
     text-decoration: underline;
@@ -68,11 +69,14 @@ button#forgotPasswordButton {
     height: 36px;
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
-    background-color: white;
+    color: white;
+    background-color: white ;
     border-color: #2e6da4;
     border-radius: 4px;
     cursor: pointer;
+    position: absolute;
+    left: 30%;
+
   }  
   
   button#forgotPasswordButton:hover {

@@ -37,7 +37,14 @@ app.use(bodyParser.json({ extended: false }));
 app.use(express.static(__dirname + '/views'));
 
 User.hasMany(Expenses);
-Expenses.belongsTo(User , {constraints: true, onDelete: 'CASCADE'});
+Expenses.belongsTo(User , {
+    
+    foreignKey: {
+
+        allowNull: false
+    },
+    constraints: true, onDelete: 'CASCADE'});
+
 User.hasMany(Order);
 Order.belongsTo(User , {constraints: true, onDelete: 'CASCADE'});
 

@@ -132,8 +132,8 @@ exports.getLeaderboard = (req,res,next) => {
 async function uploadToS3(expensesJson,fileName){
 
     const BUCKET_NAME = 'expensetrackerlulu';
-    const IAM_USER_KEY = 'AKIA27COEMXZLSWOD5EN';
-    const IAM_USER_SECRET = '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';
+    const IAM_USER_KEY = '';
+    const IAM_USER_SECRET = '';
 
     const s3 = new AWS.S3({
 
@@ -177,7 +177,7 @@ exports.downloadPremium = async (req,res,next) => {
 
     try{
 
-        const expenses = await req.user.getExpenses();
+        const expenses = await Expense.findAll({where: {UserId: req.user.id}});
         const expensesJson = JSON.stringify(expenses);
         const fileName = req.user.username + '.txt';
         
@@ -195,7 +195,22 @@ exports.downloadPremium = async (req,res,next) => {
 }
 
 
+exports.getMonthlyExpenses = (req,res,next) => {
 
+    try{
+            Expense.findAll({where: {UserId: req.user.id}}).then(expenses => {
+
+                res.status(200).json({expenses});
+            }).catch(err => {
+
+                throw new Error(err.message);
+            })
+    }catch(err){
+
+        res.status(403).json({message: err.message});
+
+    }
+}
 
 
 

@@ -16,8 +16,12 @@ const userlist = document.getElementById('userlist');
 
 const token = localStorage.getItem('token');
 
+const pageSizeSelect = document.getElementById('pageSize');
+
 
 let expenses = [];
+let allExpenses = [];
+let pageSize = 5;
 
 var url = "http://localhost:5000";
 
@@ -31,7 +35,7 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     try{
         
        const page = 1;
-       const prom1 = await axios.get(`${url}/expenses?page=${page}`, {headers: {Authorization: token} })
+       const prom1 = await axios.get(`${url}/expenses?page=${page}&pageSize=${pageSize}`, {headers: {Authorization: token} })
        const prom2 = await axios.get(`${url}/premium/check`, {headers: {Authorization: token} })
        expenses = prom1.data.Expenses;
        Promise.all([prom1,prom2]).then((values) => {
@@ -53,7 +57,7 @@ window.addEventListener('DOMContentLoaded',async ()=>{
 
                 displayData(values[0].data.Expenses[i]);
             }
-            showPagination(values[0].data);
+            showPagination(values[0].data,pageSize);
         })
     }  
     catch(err){
@@ -61,8 +65,16 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     }
 
 });
+pageSizeSelect.addEventListener('change', (e) => {
 
-function showPagination(pageData) {
+    pageSize = e.target.value;
+    getExpenses(1, pageSize);
+  });
+  
+  
+  
+  
+function showPagination(pageData,pageSize) {
 
     
 
@@ -77,7 +89,7 @@ function showPagination(pageData) {
 
             const prevbtn = document.createElement('button');
             prevbtn.innerHTML = pageData.previousPage;
-            prevbtn.addEventListener('click', () => getExpenses(pageData.previousPage));
+            prevbtn.addEventListener('click', () => getExpenses(pageData.previousPage,pageSize));
             pagination.appendChild(prevbtn);
         }
         const current = document.createElement('button');
@@ -88,12 +100,12 @@ function showPagination(pageData) {
 
             const nextbtn = document.createElement('button');
             nextbtn.innerHTML = pageData.nextPage;
-            nextbtn.addEventListener('click', () => getExpenses(pageData.nextPage));
+            nextbtn.addEventListener('click', () => getExpenses(pageData.nextPage,pageSize));
             pagination.appendChild(nextbtn);
         }
         const lastbtn = document.createElement('button');
         lastbtn.innerHTML = "last";
-        lastbtn.addEventListener('click', () => getExpenses(last));
+        lastbtn.addEventListener('click', () => getExpenses(last,pageSize));
         pagination.appendChild(lastbtn); 
 
 
@@ -242,20 +254,28 @@ function premiumFeatures(){
        
     })
 
-    monthlyButton.addEventListener('click',()=>{
+    monthlyButton.addEventListener('click',async ()=>{
 
         //convert expenses array to monthly expenses array and display as html table
+        await axios.get(`${url}/premium/monthly`, {headers: {Authorization: token} })
+        .then((res) => {
+             
+               allExpenses = res.data.expenses;
+
+        }).catch((err) => {
+            console.log(err);
+        });
         let monthlyExpenses = [];
         let curdate = new Date();
         let month = curdate.getMonth();
 
-        for(let i=0;i<expenses.length;i++){
+        for(let i=0;i<allExpenses.length;i++){
 
-            let postdate = new Date(expenses[i].createdAt);
+            let postdate = new Date(allExpenses[i].createdAt);
             let postmonth = postdate.getMonth();
             if(postmonth == month){
 
-                monthlyExpenses.push(expenses[i]);
+                monthlyExpenses.push(allExpenses[i]);
             }
 
         }
@@ -324,15 +344,23 @@ function premiumFeatures(){
 
     })
 
-    yearlyButton.addEventListener('click',()=>{
+    yearlyButton.addEventListener('click',async ()=>{
 
+        await axios.get(`${url}/premium/monthly`, {headers: {Authorization: token} })
+        .then((res) => {
+             
+               allExpenses = res.data.expenses;
+               
+        }).catch((err) => {
+            console.log(err);
+        });
         let yearlyExpenses = [];
         let monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
         ];
 
-        for (let i = 0; i < expenses.length; i++) {
-          let date = new Date(expenses[i].createdAt);
+        for (let i = 0; i < allExpenses.length; i++) {
+          let date = new Date(allExpenses[i].createdAt);
           let month = date.getMonth() + 1; // months are zero-indexed
           let year = date.getFullYear();
           let monthString = month.toString().padStart(2, "0"); // pad month with leading zero
@@ -342,11 +370,11 @@ function premiumFeatures(){
             // create new month if it does not exist
               yearlyExpenses[key] = {
               month: month,
-              expenses: expenses[i].expenseval
+              expenses: allExpenses[i].expenseval
             };
           } else {
             // add expenses for existing month
-            yearlyExpenses[key].expenses += expenses[i].expenseval;
+            yearlyExpenses[key].expenses += allExpenses[i].expenseval;
           }
         }
 
@@ -416,10 +444,10 @@ function premiumFeatures(){
 
 }
 
-function getExpenses(page) {
+function getExpenses(page,pageSize) {
     
     expenselist.innerHTML = "";
-    axios.get(`${url}/expenses?page=${page}`, {headers: {Authorization: token} }).then((items) => {
+    axios.get(`${url}/expenses?page=${page}&pageSize=${pageSize}`, {headers: {Authorization: token} }).then((items) => {
 
         expenses = items.data.Expenses;
         console.log(expenses);
@@ -428,7 +456,7 @@ function getExpenses(page) {
             displayData(expenses[i]);
             
         }
-        showPagination(items.data);
+        showPagination(items.data,pageSize);
 
     }).catch(err => console.log(err));
 }

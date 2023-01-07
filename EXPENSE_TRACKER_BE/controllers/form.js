@@ -8,6 +8,7 @@ exports.getExpenses = async (req, res, next) => {
     try{
 
         const page = Number(req.query.page);
+        let pageSize = Number(req.query.pageSize);
         curuser = req.user.id;
         if(page < 1 ){
 
@@ -18,16 +19,15 @@ exports.getExpenses = async (req, res, next) => {
         .then(count => {
 
         totalItems = count;
-        const perPage = 10;
-        const totalPage = Math.ceil(totalItems/perPage);
-        Expense.findAll({where: {UserId: req.user.id}, offset: (page-1)*perPage, limit: perPage})
+        const totalPage = Math.ceil(totalItems/pageSize);
+        Expense.findAll({where: {UserId: req.user.id}, offset: (page-1)*pageSize, limit: pageSize})
         
         .then(expenses => {
 
             res.status(200).json({Expenses: expenses, 
                                   totalItems: totalItems,
                                   currentPage: page,
-                                  hasNextPage: perPage*page < totalItems,
+                                  hasNextPage: pageSize*page < totalItems,
                                   hasPreviousPage: page > 1,
                                   nextPage: page + 1,
                                   previousPage: page - 1,

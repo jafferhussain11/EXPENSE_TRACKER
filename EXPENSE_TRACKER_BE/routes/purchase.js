@@ -18,6 +18,8 @@ router.get('/premium/leaderboard',auth.isAuth,purchaseController.getLeaderboard)
 
 router.get('/premium/download',auth.isAuth,purchaseController.downloadPremium);
 
+router.get('/premium/monthly',auth.isAuth,purchaseController.getMonthlyExpenses);
+
 router.get('/premium',auth.isAuth,purchaseController.purchasePremium);
 
 router.post('/premium',jsonparser,auth.isAuth,purchaseController.verifyPayment);
