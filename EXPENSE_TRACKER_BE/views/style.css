@@ -138,4 +138,19 @@ li{
 
   }
 
+  table {
+    border-collapse: collapse; /* collapse cell borders */
+    width: 100%; /* stretch table to fill parent element */
+  }
+  
+  th, td {
+    border: 1px solid #dddddd; /* add cell borders */
+    text-align: left; /* align cell content to the left */
+    padding: 8px; /* add padding to cells */
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd; /* add alternating row colors */
+  }
+  
  

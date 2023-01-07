@@ -2,6 +2,7 @@ const rzp = require('razorpay');
 const Expense = require('../models/expense');
 const Order = require('../models/orders');
 const User = require('../models/users');
+const AWS = require('aws-sdk');
 
 const Sequelize = require('sequelize');
 
@@ -124,6 +125,70 @@ exports.getLeaderboard = (req,res,next) => {
        
 
     }catch(err){
+
+        res.status(403).json({message: err.message});
+    }
+}
+async function uploadToS3(expensesJson,fileName){
+
+    const BUCKET_NAME = 'expensetrackerlulu';
+    const IAM_USER_KEY = 'AKIA27COEMXZLSWOD5EN';
+    const IAM_USER_SECRET = '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';
+
+    const s3 = new AWS.S3({
+
+        accessKeyId: IAM_USER_KEY,
+        secretAccessKey: IAM_USER_SECRET,
+    });
+
+    const params = {
+
+        Bucket: BUCKET_NAME,
+        Key: fileName,
+        Body: expensesJson,
+        ACL : 'public-read'
+    };
+    
+    return new Promise((resolve,reject) => {
+        
+        
+            s3.upload(params, (err, data) => {
+            
+                if(err){
+                    
+                        reject(err);
+                
+                }
+                else{
+                
+                    resolve(data.Location);
+                }
+            });
+    });
+
+   
+
+
+}
+
+
+
+exports.downloadPremium = async (req,res,next) => {
+
+    try{
+
+        const expenses = await req.user.getExpenses();
+        const expensesJson = JSON.stringify(expenses);
+        const fileName = req.user.username + '.txt';
+        
+        const url = await uploadToS3(expensesJson,fileName);
+
+        return res.status(200).json({url});
+
+
+        
+    }
+    catch(err){
 
         res.status(403).json({message: err.message});
     }

@@ -14,6 +14,9 @@ const premiumFeaturesDiv = document.getElementById('premiumFeaturesDiv');
 
 const userlist = document.getElementById('userlist');
 
+const token = localStorage.getItem('token');
+
+
 let expenses = [];
 
 var url = "http://localhost:5000";
@@ -27,7 +30,6 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     
     try{
         
-       const token = localStorage.getItem('token');
        const prom1 = await axios.get(`${url}/expenses`, {headers: {Authorization: token} })
        const prom2 = await axios.get(`${url}/premium/check`, {headers: {Authorization: token} })
        expenses = prom1.data.Expenses;
@@ -188,7 +190,7 @@ function premiumFeatures(){
 
     leaderboardButton.addEventListener('click',()=>{
         
-        axios.get(`${url}/premium/leaderboard`)
+        axios.get(`${url}/premium/leaderboard`, {headers: {Authorization: token} })
         .then((res) => {
           console.log(res.data);
           res.data.leaderboard.forEach(item => {
@@ -359,7 +361,25 @@ function premiumFeatures(){
 
     
     })
+
+    downloadexp.addEventListener('click', () => {
+        axios.get(`${url}/premium/download`, {
+          headers: {
+            Authorization: token
+          }
+        }).then((res) => {
+
+            let url = res.data.url;
+            let a = document.createElement('a');
+            a.href = url;
+            a.click();
+        })
+    })
+
+
 }
+
+    
    
 
 
