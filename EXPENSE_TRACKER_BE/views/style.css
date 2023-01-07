@@ -152,5 +152,11 @@ li{
   tr:nth-child(even) {
     background-color: #dddddd; /* add alternating row colors */
   }
+  .pagination{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+}
   
  

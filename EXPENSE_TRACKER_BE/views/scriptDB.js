@@ -30,7 +30,8 @@ window.addEventListener('DOMContentLoaded',async ()=>{
     
     try{
         
-       const prom1 = await axios.get(`${url}/expenses`, {headers: {Authorization: token} })
+       const page = 1;
+       const prom1 = await axios.get(`${url}/expenses?page=${page}`, {headers: {Authorization: token} })
        const prom2 = await axios.get(`${url}/premium/check`, {headers: {Authorization: token} })
        expenses = prom1.data.Expenses;
        Promise.all([prom1,prom2]).then((values) => {
@@ -52,6 +53,7 @@ window.addEventListener('DOMContentLoaded',async ()=>{
 
                 displayData(values[0].data.Expenses[i]);
             }
+            showPagination(values[0].data);
         })
     }  
     catch(err){
@@ -60,7 +62,42 @@ window.addEventListener('DOMContentLoaded',async ()=>{
 
 });
 
+function showPagination(pageData) {
 
+    
+
+        //console.log(pageData);
+        const pagination = document.querySelector('.pagination');
+        const prev = pageData.hasPreviousPage; 
+        const next = pageData.hasNextPage;
+        const last = pageData.lastPage;
+        pagination.innerHTML = "";
+
+        if(prev){
+
+            const prevbtn = document.createElement('button');
+            prevbtn.innerHTML = pageData.previousPage;
+            prevbtn.addEventListener('click', () => getExpenses(pageData.previousPage));
+            pagination.appendChild(prevbtn);
+        }
+        const current = document.createElement('button');
+        current.innerHTML = pageData.currentPage;
+        pagination.appendChild(current);
+
+        if(next){
+
+            const nextbtn = document.createElement('button');
+            nextbtn.innerHTML = pageData.nextPage;
+            nextbtn.addEventListener('click', () => getExpenses(pageData.nextPage));
+            pagination.appendChild(nextbtn);
+        }
+        const lastbtn = document.createElement('button');
+        lastbtn.innerHTML = "last";
+        lastbtn.addEventListener('click', () => getExpenses(last));
+        pagination.appendChild(lastbtn); 
+
+
+}
 
 function addExpense(event){
 
@@ -377,6 +414,23 @@ function premiumFeatures(){
     })
 
 
+}
+
+function getExpenses(page) {
+    
+    expenselist.innerHTML = "";
+    axios.get(`${url}/expenses?page=${page}`, {headers: {Authorization: token} }).then((items) => {
+
+        expenses = items.data.Expenses;
+        console.log(expenses);
+        for(let i = 0; i < expenses.length; i++){
+           
+            displayData(expenses[i]);
+            
+        }
+        showPagination(items.data);
+
+    }).catch(err => console.log(err));
 }
 
     
