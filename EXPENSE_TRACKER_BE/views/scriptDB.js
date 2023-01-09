@@ -23,7 +23,7 @@ let expenses = [];
 let allExpenses = [];
 let pageSize = 5;
 
-var url = "http://13.233.133.166:5000";
+var url = "http://localhost:5000";
 
 //event listner1
 form.addEventListener('submit',addExpense);
@@ -88,22 +88,26 @@ function showPagination(pageData,pageSize) {
         if(prev){
 
             const prevbtn = document.createElement('button');
+            prevbtn.setAttribute('id','prevbtn');
             prevbtn.innerHTML = pageData.previousPage;
             prevbtn.addEventListener('click', () => getExpenses(pageData.previousPage,pageSize));
             pagination.appendChild(prevbtn);
         }
         const current = document.createElement('button');
+        current.setAttribute('id','current');
         current.innerHTML = pageData.currentPage;
         pagination.appendChild(current);
 
         if(next){
 
             const nextbtn = document.createElement('button');
+            nextbtn.setAttribute('id','nextbtn');
             nextbtn.innerHTML = pageData.nextPage;
             nextbtn.addEventListener('click', () => getExpenses(pageData.nextPage,pageSize));
             pagination.appendChild(nextbtn);
         }
         const lastbtn = document.createElement('button');
+        lastbtn.setAttribute('id','lastbtn');
         lastbtn.innerHTML = "last";
         lastbtn.addEventListener('click', () => getExpenses(last,pageSize));
         pagination.appendChild(lastbtn); 

@@ -225,3 +225,8 @@ tr:nth-child(even) {
   background-color: purple;
   color: white;
 }
+/* .button:hover,
+.button:active {
+  background-color: purple;
+  color: white;
+} */
