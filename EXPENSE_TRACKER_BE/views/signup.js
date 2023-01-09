@@ -8,7 +8,7 @@ submitbtn.addEventListener('click', (e) => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
   
-    // Send a POST request to the server with the input values as the request body
+    // Send a POST request to the server with the input values as the request body//
     axios.post('http://13.233.133.166:5000/signup', {
       name,
       email,
