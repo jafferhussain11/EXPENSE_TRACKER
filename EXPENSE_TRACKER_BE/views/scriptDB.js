@@ -23,7 +23,7 @@ let expenses = [];
 let allExpenses = [];
 let pageSize = 5;
 
-var url = "http://localhost:5000";
+var url = "http://13.233.133.166:5000";
 
 //event listner1
 form.addEventListener('submit',addExpense);

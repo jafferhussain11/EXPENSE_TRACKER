@@ -1,3 +1,4 @@
 *.env
 EXPENSE_TRACKER_BE/server.cert
 EXPENSE_TRACKER_BE/server.key
+**/node_modules/

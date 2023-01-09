@@ -11,14 +11,14 @@ forgotpassword.addEventListener('click', (e) => {
     }
    
     // Send a POST request to the server with the input values as the request body
-    axios.post('http://localhost:5000/forgotpassword', {
+    axios.post('http://13.233.133.166:5000/forgotpassword', {
       email,
     })
     .then(response => {
       // Check the status of the response
       alert(response.data.message);
       // send to login page
-      window.location.href='http://localhost:5000/login.html';
+      window.location.href='http://13.233.133.166:5000/login.html';
     })
     .catch(error => {
       // Log the error to the console

@@ -9,7 +9,7 @@ submitbtn.addEventListener('click', (e) => {
     const password = document.getElementById('password').value;
   
     // Send a POST request to the server with the input values as the request body
-    axios.post('http://localhost:5000/signup', {
+    axios.post('http://13.233.133.166:5000/signup', {
       name,
       email,
       password
@@ -19,7 +19,7 @@ submitbtn.addEventListener('click', (e) => {
    
         alert(response.data.message);
        // send to login page
-       window.location.href='http://localhost:5000/login.html';
+       window.location.href='http://13.233.133.166:5000/login.html';
       
     })
     .catch(error => {
