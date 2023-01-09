@@ -120,6 +120,63 @@ li{
     outline-style: solid;
     outline-width: 1px;
   }
+  #monthlyButton {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5em 1em;
+    background: rgb(132, 196, 175);
+    color: black;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-radius: 3px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    outline-color: black;
+    outline-style: solid;
+    outline-width: 1px;
+  }
+  #yearlyButton {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5em 1em;
+    background: rgb(132, 196, 175);
+    color: black;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-radius: 3px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    outline-color: black;
+    outline-style: solid;
+    outline-width: 1px;
+  }
+  #downloadexp {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5em 1em;
+    background: rgb(132, 196, 175);
+    color: black;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-radius: 3px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    outline-color: black;
+    outline-style: solid;
+    outline-width: 1px;
+  }
 
   #userlist {  
     margin: 0 auto;
