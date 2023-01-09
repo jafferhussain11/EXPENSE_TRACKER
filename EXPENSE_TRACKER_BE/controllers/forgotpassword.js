@@ -53,7 +53,7 @@ exports.postForgotPasswordLink = (req, res, next) => {
                     return res.status(200).json({message: 'No user found with this email'});
                 }
                 const token = Math.floor(Math.random() * 1000000);
-                const resetPasswordLink = `http://13.233.133.166/:5000/forgotpassword/reset-password?token=${token}&email=${email}`;
+                const resetPasswordLink = `http://13.233.133.166:5000/forgotpassword/reset-password?token=${token}&email=${email}`;
                 reset_token.create( {token: token, usermail: user.email, expirationDate : Date.now() + 3600000 }).then(() => {
 
                     const apiInstance = new sib.TransactionalEmailsApi();
