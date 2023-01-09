@@ -15,8 +15,8 @@ var cors = require('cors'); //
 app.use(cors());//cross origin resource sharing - allows us to make requests from one domain to another if we dont use this we will get an error
 //app.use(helmet());
 
-const privateKey = fs.readFileSync('server.key');
-const certificate = fs.readFileSync('server.cert');
+////const privateKey = fs.readFileSync('server.key');
+////const certificate = fs.readFileSync('server.cert');
 
 
 const bodyParser = require('body-parser');
