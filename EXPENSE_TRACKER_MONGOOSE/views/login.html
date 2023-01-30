@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="login.css">
+  <script src="./login.js" defer></script>
+
+</head>
+<body>
+  <h1>Login</h1>
+  <form method="post" action="/login">
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br>
+    <br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br>
+    <br>
+    <button id="loginbtn">Login</button>
+    
+  </form> 
+  <br>
+  <br>
+    <button id="forgotPasswordButton" ><a href="/forgotpassword.html">Forgot Password</a>
+    </button>
+  <p id="signuplink">Don't have an account? <a href="/signup.html">Sign up</a> here.</p>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
+
+</body>
+</html>

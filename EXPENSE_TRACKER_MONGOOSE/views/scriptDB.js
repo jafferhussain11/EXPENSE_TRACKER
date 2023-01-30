@@ -147,10 +147,10 @@ function addExpense(event){
 function displayData(data){
 
     let li = document.createElement('li');
-    li.setAttribute('id',data.id); // setting this att value for the new li item helps us to grab an html element and delete it
+    li.setAttribute('id',data._id); // setting this att value for the new li item helps us to grab an html element and delete it
     li.innerHTML =`${data.expenseval}   ${data.description}  ${data.category}
-     <button id="edit" onClick=editExpense('${data.expenseval}','${data.description}','${data.category}','${data.id}')>edit</button> 
-     <button id="delete" onClick=deleteExpense('${data.id}')>delete</button>`;
+     <button id="edit" onClick=editExpense('${data.expenseval}','${data.description}','${data.category}','${data._id}')>edit</button> 
+     <button id="delete" onClick=deleteExpense('${data._id}')>delete</button>`;
     expenselist.appendChild(li);
     console.log(data);
 
@@ -184,11 +184,11 @@ document.getElementById('rzp-button').onclick = async function(e){
 
     const token = localStorage.getItem('token');
     const prom = await axios.get(`${url}/premium`, {headers: {Authorization: token} })
-   
+    console.log(prom.data);
     var options = {
        
         "key" : prom.data.key_id, // Enter the Key ID generated from the Dashboard
-        "order_id" : prom.data.order.id,
+        "order_id" : prom.data.orderId,
         "handler" :  async function (response){
 
             await axios.post(`${url}/premium`,
@@ -248,7 +248,7 @@ function premiumFeatures(){
           console.log(res.data);
           res.data.leaderboard.forEach(item => {
             let li = document.createElement('li');
-            li.innerHTML = `User: ${item.name} - Total Expenses: ${item.amount}`;
+            li.innerHTML = `User: ${item.username} - Total Expenses: ${item.totalAmount}`;
             userlist.appendChild(li);
           });
         leaderboardButton.style.display = 'none';
@@ -263,8 +263,10 @@ function premiumFeatures(){
         //convert expenses array to monthly expenses array and display as html table
         await axios.get(`${url}/premium/monthly`, {headers: {Authorization: token} })
         .then((res) => {
-             
+              
+            
                allExpenses = res.data.expenses;
+               console.log(allExpenses);
 
         }).catch((err) => {
             console.log(err);

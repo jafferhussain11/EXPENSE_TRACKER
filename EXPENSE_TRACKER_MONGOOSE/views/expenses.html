@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPENSE Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form id="myform" class="wholeform">
+        <h1>₹ Expense Tracker ₹</h1><br>
+        <br>
+        <label for="expenseval">Choose expense value :</label>
+        <input id="expenseval" type="number" ></input>
+        <label for="desc">Choose Description :</label>
+        <input id="desc" type="text" ></input>
+        <label for="cat">Choose a category:</label>
+        <select id="cat" name="category">
+             <option value="movies">movies</option>
+             <option value="restaurants">restaurants</option>
+             <option value="games">games</option>
+             <option value="houserent">house rent</option>
+        </select>
+        <input id="addExpButton"class="button" type="submit" value="Add Expense!">
+      
+        
+
+
+    </form>
+    <br>
+    <br>
+    <div>
+        <ul id="expenselist"></ul>
+    </div>
+    <div class="pagination">
+
+    </div>
+
+    <div id="expensesdropdown">
+        <label for="pageSize">Number of expenses per page:</label>
+        <select id="pageSize">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
+    </div>
+    
+    <button id="rzp-button" class="buy-premium-button">Buy Premium</button>
+    <div id="messageDiv"></div>
+    <div id="premiumFeaturesDiv">
+        <ul id="userlist"></ul>
+    </div>
+   
+    <script src = "https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
+    <script src="scriptDB.js"></script>
+
+
+    
+</body>
+</html>
