@@ -11,7 +11,7 @@ const formController = require('../controllers/form');
 const router = express.Router();//this is a function that returns an object
 
 router.get('/expenses',auth.isAuth,formController.getExpenses);
-router.post('/addexpense',jsonparser,formController.insertExpense); //jsonparser is a middleware that parses the json data in the body of the request and puts it in the req.body object
-router.delete('/deletexpense/:id',formController.deleteExpense); 
+router.post('/addexpense',auth.isAuth,jsonparser,formController.insertExpense); //jsonparser is a middleware that parses the json data in the body of the request and puts it in the req.body object
+router.delete('/deletexpense/:id',auth.isAuth,formController.deleteExpense); 
 
 module.exports = router;

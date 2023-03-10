@@ -5,7 +5,7 @@ const https = require('https');
 const express = require('express');
 const app = express(); //this is a function that returns an object
 
-const helmet = require('helmet');
+
 const morgan = require('morgan');
 
 const dotenv = require('dotenv');
@@ -13,7 +13,7 @@ dotenv.config();
 
 var cors = require('cors'); //
 app.use(cors());//cross origin resource sharing - allows us to make requests from one domain to another if we dont use this we will get an error
-//app.use(helmet());
+
 
 ////const privateKey = fs.readFileSync('server.key');
 ////const certificate = fs.readFileSync('server.cert');

@@ -18,6 +18,11 @@ const token = localStorage.getItem('token');
 
 const pageSizeSelect = document.getElementById('pageSize');
 
+const logoutButton = document.getElementById('logout');
+
+
+
+
 
 let expenses = [];
 let allExpenses = [];
@@ -28,6 +33,21 @@ var url = "http://localhost:5000";
 //event listner1
 form.addEventListener('submit',addExpense);
 
+window.addEventListener('load', function() {
+    // retrieve the token from local storage
+    const token = localStorage.getItem('token');
+    
+    // if the token is not present, redirect to the login page
+    if (!token) {
+      window.location.href = 'login.html';
+    }
+  });
+  
+  
+  
+  
+  
+  
 //event DOMreload
 window.addEventListener('DOMContentLoaded',async ()=>{
 
@@ -130,7 +150,7 @@ function addExpense(event){
 
         try{
 
-            const prom = await axios.post(`${url}/addexpense`,data);
+            const prom = await axios.post(`${url}/addexpense`,data,{headers: {Authorization: token} });
             console.log(prom.data);
             displayData(prom.data.value); //prom.data.value recieves the data from the server including the id and passed to displayData function !
         }
@@ -171,7 +191,7 @@ async function deleteExpense(id){
 
     try{
 
-        const prom = await axios.delete(`${url}/deletexpense/${id}`);
+        const prom = await axios.delete(`${url}/deletexpense/${id}`, {headers: {Authorization: token} });
         liToDelete.remove();
 
     }
@@ -464,6 +484,18 @@ function getExpenses(page,pageSize) {
 
     }).catch(err => console.log(err));
 }
+
+logoutButton.addEventListener('click', (e) => {
+    e.preventDefault();
+  
+    // Remove token from local storage
+    localStorage.removeItem('token');
+
+    window.history.pushState(null, null, "login.html"); //
+  
+    // Redirect user to login page
+    window.location.href = 'login.html';
+  });
 
     
    

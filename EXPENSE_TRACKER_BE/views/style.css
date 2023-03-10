@@ -225,8 +225,25 @@ tr:nth-child(even) {
   background-color: purple;
   color: white;
 }
-/* .button:hover,
-.button:active {
-  background-color: purple;
-  color: white;
-} */
+
+.logout-button {
+    
+  float: right;
+  top: 5%;
+  padding: 0.5em 1em;
+  background: rgb(132, 196, 175);
+  color: black;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-radius: 3px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  outline-color: black;
+  outline-style: solid;
+  outline-width: .5px;
+  }
+
+
